@@ -18,12 +18,12 @@ namespace BookListRazor.Pages.BookList
         [BindProperty]
         public Book Book { get; set; }
 
-        public async Task OnGet(int id)
+        public async Task OnGetAsync(int id)
         {
             Book = await _db.Books.FindAsync(id);
         }
 
-        public async Task<IActionResult> OnPost()
+        public async Task<IActionResult> OnPostAsync()
         {
             if (ModelState.IsValid)
             {
