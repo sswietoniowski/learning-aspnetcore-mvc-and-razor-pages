@@ -7,8 +7,10 @@ namespace BookListRazor.Data
     {
         public DbSet<Book> Books { get; set; }
 
-        public BookListRazorDbContext(DbContextOptions options) : base(options)
+        public BookListRazorDbContext(DbContextOptions<BookListRazorDbContext> options) : base(options)
         {
         }
+
+
     }
 }
