@@ -9,18 +9,18 @@ namespace BookListRazor.Pages.BookList
 {
     public class IndexModel : PageModel
     {
-        private readonly BookListRazorDbContext _context;
+        private readonly BookListRazorDbContext _db;
 
-        public IndexModel(BookListRazorDbContext context)
+        public IndexModel(BookListRazorDbContext db)
         {
-            _context = context;
+            _db = db;
         }
 
         public IEnumerable<Book> Books { get; set; }
 
         public async Task OnGetAsync()
         {
-            Books = await _context.Books.ToListAsync();
+            Books = await _db.Books.ToListAsync();
         }
     }
 }

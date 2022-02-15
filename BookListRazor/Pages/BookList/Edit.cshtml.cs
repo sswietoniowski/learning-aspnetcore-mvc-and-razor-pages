@@ -6,11 +6,11 @@ using System.Threading.Tasks;
 
 namespace BookListRazor.Pages.BookList
 {
-    public class CreateModel : PageModel
+    public class EditModel : PageModel
     {
         private readonly BookListRazorDbContext _db;
 
-        public CreateModel(BookListRazorDbContext db)
+        public EditModel(BookListRazorDbContext db)
         {
             _db = db;
         }
@@ -18,23 +18,29 @@ namespace BookListRazor.Pages.BookList
         [BindProperty]
         public Book Book { get; set; }
 
-        public void OnGet()
+        public async Task OnGet(int id)
         {
+            Book = await _db.Books.FindAsync(id);
         }
 
         public async Task<IActionResult> OnPost()
         {
             if (ModelState.IsValid)
             {
-                await _db.Books.AddAsync(Book);
+                var book = await _db.Books.FindAsync(Book.Id);
+                book.Name = Book.Name;
+                book.Author = Book.Author; 
+                book.ISBN = Book.ISBN;
+
                 await _db.SaveChangesAsync();
 
                 return RedirectToPage("Index");
             }
             else
             {
-                return Page();
+                return RedirectToPage();
             }
         }
     }
 }
+
