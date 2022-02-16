@@ -20,7 +20,7 @@ function loadDataTable() {
                 "render": function (data) {
                     return `
                         <div class="text-center">
-                            <a href="/BookList/Edit?id=${data}" class="btn btn-success text-white" style="cursor:pointer; width:70px;">
+                            <a href="/BookList/Upsert?id=${data}" class="btn btn-success text-white" style="cursor:pointer; width:70px;">
                                 Edit
                             </a>
                             &nbsp;
