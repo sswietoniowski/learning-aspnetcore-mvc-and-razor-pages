@@ -19,7 +19,8 @@ function loadDataTable() {
                             <a href="/Admin/Categories/Upsert/${data}" class="btn btn-success text-white fas fa-edit">
                                 <i style="cursor:pointer"></i>
                             </a>
-                            <a class="btn btn-danger text-white fas fa-trash-alt">
+                            <a class="btn btn-danger text-white fas fa-trash-alt"
+                                onclick=Delete('/Admin/Categories/Delete/${data}')>
                                 <i style="cursor:pointer"></i>
                             </a>
                         </div>
@@ -28,5 +29,31 @@ function loadDataTable() {
                 "width": "40%"
             }
         ]
+    });
+}
+
+function Delete(url) {
+    swal({
+        title: "Are you sure?",
+        text: "Once deleted, you will not be able to recover",
+        icon: "warning",
+        buttons: true,
+        dangerMode: true
+    }).then((willDelete) => {
+        if (willDelete) {
+            $.ajax({
+                type: "DELETE",
+                url: url,
+                success: function (data) {
+                    if (data.success) {
+                        toastr.success(data.message);
+                        dataTable.ajax.reload();
+                    }
+                    else {
+                        toastr.error(data.message);
+                    }
+                }
+            });
+        }
     });
 }
