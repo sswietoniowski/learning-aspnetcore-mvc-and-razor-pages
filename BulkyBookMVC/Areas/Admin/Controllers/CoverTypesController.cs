@@ -49,15 +49,14 @@ namespace BulkyBook.MVC.Areas.Admin.Controllers
             if (ModelState.IsValid)
             {
                 var parameters = new DynamicParameters();
+                parameters.Add("@Name", coverType.Name);
                 if (coverType.Id == 0)
                 {
-                    parameters.Add("@Name", coverType.Name);
                     _unitOfWork.StoredProcedureCalls.Execute(SD.SP_CoverTypes_Insert, parameters);
                 }
                 else
                 {
                     parameters.Add("@Id", coverType.Id);
-                    parameters.Add("@Name", coverType.Name);
                     _unitOfWork.StoredProcedureCalls.Execute(SD.SP_CoverTypes_Update, parameters);
                 }
 
