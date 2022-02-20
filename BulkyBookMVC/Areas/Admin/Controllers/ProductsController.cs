@@ -110,6 +110,24 @@ namespace BulkyBook.MVC.Areas.Admin.Controllers
 
                 return RedirectToAction(nameof(Index));
             }
+            else
+            {
+                // handling edge case (error in case when client's validation would be disabled and not all
+                // inputs would be properly selected), otherwise we woudl see a 500 error
+
+                var categories = _unitOfWork.Categories.GetAll()
+                    .Select(item => new SelectListItem { Text = item.Name, Value = item.Id.ToString() });
+                productViewModel.Categories = categories;
+
+                var coverTypes = _unitOfWork.CoverTypes.GetAll()
+                    .Select(item => new SelectListItem { Text = item.Name, Value = item.Id.ToString() });
+                productViewModel.CoverTypes = coverTypes;
+
+                if (productViewModel.Product.Id != 0)
+                {
+                    productViewModel.Product = _unitOfWork.Products.Get(productViewModel.Product.Id);
+                }
+            }
 
             return View(productViewModel);
         }
