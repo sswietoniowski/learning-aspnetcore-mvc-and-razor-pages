@@ -3,10 +3,13 @@ using BulkyBook.DataAccess.Data;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Localization;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using System.Collections.Generic;
+using System.Globalization;
 
 namespace BulkyBook.MVC
 {
@@ -54,6 +57,21 @@ namespace BulkyBook.MVC
 
             app.UseAuthentication();
             app.UseAuthorization();
+
+            var supportedCultures = new List<CultureInfo>
+            {
+                new CultureInfo("pl-PL"),
+                new CultureInfo("en-US")
+            };
+
+            app.UseRequestLocalization(new RequestLocalizationOptions
+            {
+                DefaultRequestCulture = new RequestCulture("pl-PL"),
+                // Formatting numbers, dates, etc.
+                SupportedCultures = supportedCultures,
+                //// UI strings that we have localized
+                //SupportedUICultures = supportedCultures
+            });
 
             app.UseEndpoints(endpoints =>
             {

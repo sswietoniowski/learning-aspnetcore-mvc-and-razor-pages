@@ -20,17 +20,21 @@ namespace BulkyBook.Models
         public string Author { get; set; }
         [Required]
         [Range(1, 10000)]
+        [DisplayFormat(ApplyFormatInEditMode = true)]
         [Column(TypeName="decimal(18,2)")]
         public decimal ListPrice { get; set; }
         [Required]
         [Range(1, 10000)]
         [Column(TypeName = "decimal(18,2)")]
+        [DisplayFormat(ApplyFormatInEditMode = true)]
         public decimal Price { get; set; }
         [Required]
         [Range(1, 10000)]
+        [DisplayFormat(ApplyFormatInEditMode = true)]
         public decimal Price50 { get; set; }
         [Required]
         [Range(1, 10000)]
+        [DisplayFormat(ApplyFormatInEditMode = true)]
         public decimal Price100 { get; set; }
         public string ImageUrl { get; set; }
 
