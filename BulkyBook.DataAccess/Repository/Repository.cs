@@ -53,7 +53,7 @@ namespace BulkyBook.DataAccess.Repository
             return query.ToList();
         }
 
-        public T GetFirstOrDefaultAll(
+        public T GetFirstOrDefault(
             Expression<Func<T, bool>> filter = null,
             string includeProperties = null)
         {

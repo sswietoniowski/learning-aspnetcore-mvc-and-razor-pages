@@ -15,7 +15,7 @@ namespace BulkyBook.DataAccess.Repository.IRepository
             string includeProperties = null
         );
 
-        T GetFirstOrDefaultAll(
+        T GetFirstOrDefault(
             Expression<Func<T, bool>> filter = null,
             string includeProperties = null
         );
