@@ -1,5 +1,7 @@
 ﻿using BulkyBook.DataAccess;
 using BulkyBook.Models;
+using BulkyBook.Utility;
+using Dapper;
 using Microsoft.AspNetCore.Mvc;
 
 namespace BulkyBook.MVC.Areas.Admin.Controllers
@@ -28,7 +30,9 @@ namespace BulkyBook.MVC.Areas.Admin.Controllers
                 return View(coverType);
             }
 
-            coverType = _unitOfWork.CoverTypes.Get(id.GetValueOrDefault());
+            var parameters = new DynamicParameters();
+            parameters.Add("@Id", id.GetValueOrDefault());
+            coverType = _unitOfWork.StoredProcedureCalls.OneRecord<CoverType>(SD.SP_CoverTypes_Select, parameters);
 
             if (coverType is null)
             {
@@ -44,15 +48,18 @@ namespace BulkyBook.MVC.Areas.Admin.Controllers
         {
             if (ModelState.IsValid)
             {
+                var parameters = new DynamicParameters();
                 if (coverType.Id == 0)
                 {
-                    _unitOfWork.CoverTypes.Add(coverType);
+                    parameters.Add("@Name", coverType.Name);
+                    _unitOfWork.StoredProcedureCalls.Execute(SD.SP_CoverTypes_Insert, parameters);
                 }
                 else
                 {
-                    _unitOfWork.CoverTypes.Update(coverType);
+                    parameters.Add("@Id", coverType.Id);
+                    parameters.Add("@Name", coverType.Name);
+                    _unitOfWork.StoredProcedureCalls.Execute(SD.SP_CoverTypes_Update, parameters);
                 }
-                _unitOfWork.Save();
 
                 return RedirectToAction(nameof(Index));
             }
@@ -65,21 +72,22 @@ namespace BulkyBook.MVC.Areas.Admin.Controllers
         [HttpGet]
         public IActionResult GetAll()
         {
-            var coverTypes = _unitOfWork.CoverTypes.GetAll();
+            var coverTypes = _unitOfWork.StoredProcedureCalls.List<CoverType>(SD.SP_CoverTypes_SelectAll, null);
             return Json(new { data = coverTypes });
         }
 
         [HttpDelete]
         public IActionResult Delete(int id)
         {
-            var coverTypeFromDb = _unitOfWork.CoverTypes.Get(id);
+            var parameters = new DynamicParameters();
+            parameters.Add("@Id", id);
+            var coverTypeFromDb = _unitOfWork.StoredProcedureCalls.OneRecord<CoverType>(SD.SP_CoverTypes_Select, parameters);
             if (coverTypeFromDb is null)
             {
                 return Json(new { success = false, message = "Error while deleting" });
             }
 
-            _unitOfWork.CoverTypes.Remove(coverTypeFromDb);
-            _unitOfWork.Save();
+            _unitOfWork.StoredProcedureCalls.Execute(SD.SP_CoverTypes_Delete, parameters);
 
             return Json(new { success = true, message = "Delete successful" });
         }
