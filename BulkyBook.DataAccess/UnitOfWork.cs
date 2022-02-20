@@ -10,6 +10,7 @@ namespace BulkyBook.DataAccess
 
         public ICategoryRepository Categories { get; }
         public ICoverTypeRepository CoverTypes { get; }
+        public IProductRepository Products { get; }
 
         public IStoredProcedureCall StoredProcedureCalls { get; }
 
@@ -18,6 +19,7 @@ namespace BulkyBook.DataAccess
             _db = db;
             Categories = new CategoryRepository(_db);
             CoverTypes = new CoverTypeRepository(_db);
+            Products = new ProductRepository(_db);
             StoredProcedureCalls = new StoredProcedureCall(_db);
         }
 

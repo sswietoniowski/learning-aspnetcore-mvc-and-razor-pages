@@ -91,11 +91,6 @@ namespace BulkyBook.DataAccess.Migrations
                     b.Property<decimal>("ListPrice")
                         .HasColumnType("decimal(18,2)");
 
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasMaxLength(256)
-                        .HasColumnType("nvarchar(256)");
-
                     b.Property<decimal>("Price")
                         .HasColumnType("decimal(18,2)");
 
@@ -104,6 +99,11 @@ namespace BulkyBook.DataAccess.Migrations
 
                     b.Property<decimal>("Price50")
                         .HasColumnType("decimal(18,2)");
+
+                    b.Property<string>("Title")
+                        .IsRequired()
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
 
                     b.HasKey("Id");
 
