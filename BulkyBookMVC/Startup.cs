@@ -34,6 +34,8 @@ namespace BulkyBook.MVC
 
             services.AddScoped<IUnitOfWork, UnitOfWork>();
 
+            services.AddLocalization();
+
             services.AddControllersWithViews();
         }
 
@@ -64,14 +66,16 @@ namespace BulkyBook.MVC
                 new CultureInfo("en-US")
             };
 
-            app.UseRequestLocalization(new RequestLocalizationOptions
+            var requestLocalizationOptions = new RequestLocalizationOptions
             {
                 DefaultRequestCulture = new RequestCulture("pl-PL"),
                 // Formatting numbers, dates, etc.
                 SupportedCultures = supportedCultures,
-                //// UI strings that we have localized
-                //SupportedUICultures = supportedCultures
-            });
+                // UI strings that we have localized
+                SupportedUICultures = supportedCultures
+            };
+
+            app.UseRequestLocalization(requestLocalizationOptions);
 
             app.UseEndpoints(endpoints =>
             {

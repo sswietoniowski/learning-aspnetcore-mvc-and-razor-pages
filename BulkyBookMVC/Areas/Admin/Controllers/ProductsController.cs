@@ -4,6 +4,8 @@ using BulkyBook.Models.ViewModels;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using System;
+using System.IO;
 using System.Linq;
 
 namespace BulkyBook.MVC.Areas.Admin.Controllers
@@ -58,27 +60,59 @@ namespace BulkyBook.MVC.Areas.Admin.Controllers
             return View(productViewModel);
         }
 
-        //[HttpPost]
-        //[ValidateAntiForgeryToken]
-        //public IActionResult Upsert(Product product)
-        //{
-        //    if (ModelState.IsValid)
-        //    {
-        //        if (product.Id == 0)
-        //        {
-        //            _unitOfWork.Products.Add(product);
-        //        }
-        //        else
-        //        {
-        //            _unitOfWork.Products.Update(product);
-        //        }
-        //        _unitOfWork.Save();
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult Upsert(ProductViewModel productViewModel)
+        {
+            if (ModelState.IsValid)
+            {
+                string webRootPath = _hostEnvironment.WebRootPath;
+                var files = HttpContext.Request.Form.Files;
+                if (files.Any())
+                {
+                    string fileName = Guid.NewGuid().ToString();
+                    var uploads = Path.Combine(webRootPath, @"images\products");
+                    var extension = Path.GetExtension(files[0].FileName);
 
-        //        return RedirectToAction(nameof(Index));
-        //    }
+                    if (!String.IsNullOrWhiteSpace(productViewModel.Product.ImageUrl))
+                    {
+                        // this is an edit and we need to remove old image
+                        var imagePath = Path.Combine(uploads, productViewModel.Product.ImageUrl.TrimStart('\\'));
+                        if (System.IO.File.Exists(imagePath))
+                        {
+                            System.IO.File.Delete(imagePath);
+                        }
+                    }
 
-        //    return View(product);
-        //}
+                    using var fileStreams = new FileStream(Path.Combine(uploads, fileName + extension), FileMode.Create);
+                    files[0].CopyTo(fileStreams);
+                    productViewModel.Product.ImageUrl = @"\images\products\" + fileName + extension;
+                }
+                else
+                {
+                    // update when they do not change the image
+                    if (productViewModel.Product.Id != 0)
+                    {
+                        var productFromDb = _unitOfWork.Products.Get(productViewModel.Product.Id);
+                        productViewModel.Product.ImageUrl = productFromDb.ImageUrl;
+                    }
+                }
+
+                if (productViewModel.Product.Id == 0)
+                {
+                    _unitOfWork.Products.Add(productViewModel.Product);
+                }
+                else
+                {
+                    _unitOfWork.Products.Update(productViewModel.Product);
+                }
+                _unitOfWork.Save();
+
+                return RedirectToAction(nameof(Index));
+            }
+
+            return View(productViewModel);
+        }
 
         #region API CALLS
 
@@ -96,6 +130,16 @@ namespace BulkyBook.MVC.Areas.Admin.Controllers
             if (productFromDb is null)
             {
                 return Json(new { success = false, message = "Error while deleting" });
+            }
+
+            if (!String.IsNullOrWhiteSpace(productFromDb.ImageUrl))
+            {
+                string webRootPath = _hostEnvironment.WebRootPath;
+                var imagePath = Path.Combine(webRootPath, productFromDb.ImageUrl.TrimStart('\\'));
+                if (System.IO.File.Exists(imagePath))
+                {
+                    System.IO.File.Delete(imagePath);
+                }
             }
 
             _unitOfWork.Products.Remove(productFromDb);
