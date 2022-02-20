@@ -9,6 +9,7 @@ namespace BulkyBook.DataAccess
         private readonly ApplicationDbContext _db;
 
         public ICategoryRepository Categories { get; }
+        public ICoverTypeRepository CoverTypes { get; }
 
         public IStoredProcedureCall StoredProcedureCalls { get; }
 
@@ -16,6 +17,7 @@ namespace BulkyBook.DataAccess
         {
             _db = db;
             Categories = new CategoryRepository(_db);
+            CoverTypes = new CoverTypeRepository(_db);
             StoredProcedureCalls = new StoredProcedureCall(_db);
         }
 
