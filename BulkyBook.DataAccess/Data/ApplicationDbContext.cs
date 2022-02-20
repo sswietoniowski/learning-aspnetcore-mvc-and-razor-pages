@@ -8,6 +8,7 @@ namespace BulkyBook.DataAccess.Data
     {
         public DbSet<Category> Categories { get; set; }
         public DbSet<CoverType> CoverTypes { get; set; }
+        public DbSet<Product> Products { get; set; }
 
         public ApplicationDbContext()
         {
@@ -27,6 +28,20 @@ namespace BulkyBook.DataAccess.Data
             }
 
             base.OnConfiguring(optionsBuilder);
+        }
+
+        protected override void OnModelCreating(ModelBuilder builder)
+        {
+            // 1st two prices were handled using annotations, the last two will be done with builder
+            // remember that's only for the demo purposes - normaly we would use only one method
+            builder.Entity<Product>()
+                .Property(p => p.Price50)
+                .HasColumnType("decimal(18,2)");
+            builder.Entity<Product>()
+                .Property(p => p.Price100)
+                .HasColumnType("decimal(18,2)");
+
+            base.OnModelCreating(builder);
         }
     }
 }
