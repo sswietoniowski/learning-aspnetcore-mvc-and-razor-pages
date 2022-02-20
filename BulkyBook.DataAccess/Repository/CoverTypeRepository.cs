@@ -1,7 +1,8 @@
-﻿using BulkyBook.Models;
+﻿using BulkyBook.DataAccess.Repository.IRepository;
+using BulkyBook.Models;
 using Microsoft.EntityFrameworkCore;
 
-namespace BulkyBook.DataAccess.Repository.IRepository
+namespace BulkyBook.DataAccess.Repository
 {
     public class CoverTypeRepository : Repository<CoverType>, ICoverTypeRepository
     {

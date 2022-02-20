@@ -5,11 +5,11 @@ using Microsoft.AspNetCore.Mvc;
 namespace BulkyBook.MVC.Areas.Admin.Controllers
 {
     [Area("Admin")]
-    public class CategoriesController : Controller
+    public class CoverTypesController : Controller
     {
         private readonly IUnitOfWork _unitOfWork;
 
-        public CategoriesController(IUnitOfWork unitOfWork)
+        public CoverTypesController(IUnitOfWork unitOfWork)
         {
             _unitOfWork = unitOfWork;
         }
@@ -21,45 +21,43 @@ namespace BulkyBook.MVC.Areas.Admin.Controllers
 
         public IActionResult Upsert(int? id)
         {
-            var category = new Category();
+            var coverType = new CoverType();
 
             if (id is null)
             {
-                // insert/create
-                return View(category);
+                return View(coverType);
             }
 
-            category = _unitOfWork.Categories.Get(id.GetValueOrDefault());            
+            coverType = _unitOfWork.CoverTypes.Get(id.GetValueOrDefault());
 
-            if (category is null)
+            if (coverType is null)
             {
                 return NotFound();
             }
 
-            // update/edit
-            return View(category);
+            return View(coverType);
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Upsert(Category category)
+        public IActionResult Upsert(CoverType coverType)
         {
             if (ModelState.IsValid)
             {
-                if (category.Id == 0)
+                if (coverType.Id == 0)
                 {
-                    _unitOfWork.Categories.Add(category);
+                    _unitOfWork.CoverTypes.Add(coverType);
                 }
                 else
                 {
-                    _unitOfWork.Categories.Update(category);
+                    _unitOfWork.CoverTypes.Update(coverType);
                 }
                 _unitOfWork.Save();
 
                 return RedirectToAction(nameof(Index));
             }
 
-            return View(category);
+            return View(coverType);
         }
 
         #region API CALLS
@@ -67,21 +65,20 @@ namespace BulkyBook.MVC.Areas.Admin.Controllers
         [HttpGet]
         public IActionResult GetAll()
         {
-            var categories = _unitOfWork.Categories.GetAll();
-
-            return Json(new { data = categories });
+            var coverTypes = _unitOfWork.CoverTypes.GetAll();
+            return Json(new { data = coverTypes });
         }
 
         [HttpDelete]
         public IActionResult Delete(int id)
         {
-            var categoryFromDb = _unitOfWork.Categories.Get(id);
-            if (categoryFromDb is null)
+            var coverTypeFromDb = _unitOfWork.CoverTypes.Get(id);
+            if (coverTypeFromDb is null)
             {
                 return Json(new { success = false, message = "Error while deleting" });
             }
 
-            _unitOfWork.Categories.Remove(categoryFromDb);
+            _unitOfWork.CoverTypes.Remove(coverTypeFromDb);
             _unitOfWork.Save();
 
             return Json(new { success = true, message = "Delete successful" });
