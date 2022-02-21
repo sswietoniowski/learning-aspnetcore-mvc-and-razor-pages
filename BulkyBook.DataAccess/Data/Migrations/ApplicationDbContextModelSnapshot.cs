@@ -72,7 +72,7 @@ namespace BulkyBook.DataAccess.Migrations
                         .HasMaxLength(64)
                         .HasColumnType("nvarchar(64)");
 
-                    b.Property<string>("StreeAddress")
+                    b.Property<string>("StreetAddress")
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
@@ -386,7 +386,7 @@ namespace BulkyBook.DataAccess.Migrations
                         .HasMaxLength(64)
                         .HasColumnType("nvarchar(64)");
 
-                    b.Property<string>("StreeAddress")
+                    b.Property<string>("StreetAddress")
                         .HasMaxLength(128)
                         .HasColumnType("nvarchar(128)");
 

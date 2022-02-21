@@ -4,14 +4,56 @@
 
 namespace BulkyBook.DataAccess.Migrations
 {
-    public partial class AddCompanyExtendApplicationUser : Migration
+    public partial class AddCompanyAndApplicationUser : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.AddColumn<string>(
+                name: "City",
+                table: "AspNetUsers",
+                type: "nvarchar(64)",
+                maxLength: 64,
+                nullable: true);
+
             migrationBuilder.AddColumn<int>(
                 name: "CompanyId",
                 table: "AspNetUsers",
                 type: "int",
+                nullable: true);
+
+            migrationBuilder.AddColumn<string>(
+                name: "Discriminator",
+                table: "AspNetUsers",
+                type: "nvarchar(max)",
+                nullable: false,
+                defaultValue: "");
+
+            migrationBuilder.AddColumn<string>(
+                name: "Name",
+                table: "AspNetUsers",
+                type: "nvarchar(64)",
+                maxLength: 64,
+                nullable: true);
+
+            migrationBuilder.AddColumn<string>(
+                name: "PostalCode",
+                table: "AspNetUsers",
+                type: "nvarchar(16)",
+                maxLength: 16,
+                nullable: true);
+
+            migrationBuilder.AddColumn<string>(
+                name: "State",
+                table: "AspNetUsers",
+                type: "nvarchar(64)",
+                maxLength: 64,
+                nullable: true);
+
+            migrationBuilder.AddColumn<string>(
+                name: "StreetAddress",
+                table: "AspNetUsers",
+                type: "nvarchar(128)",
+                maxLength: 128,
                 nullable: true);
 
             migrationBuilder.CreateTable(
@@ -21,7 +63,7 @@ namespace BulkyBook.DataAccess.Migrations
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Name = table.Column<string>(type: "nvarchar(128)", maxLength: 128, nullable: false),
-                    StreeAddress = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    StreetAddress = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     City = table.Column<string>(type: "nvarchar(64)", maxLength: 64, nullable: true),
                     State = table.Column<string>(type: "nvarchar(64)", maxLength: 64, nullable: true),
                     PostalCode = table.Column<string>(type: "nvarchar(16)", maxLength: 16, nullable: true),
@@ -60,7 +102,31 @@ namespace BulkyBook.DataAccess.Migrations
                 table: "AspNetUsers");
 
             migrationBuilder.DropColumn(
+                name: "City",
+                table: "AspNetUsers");
+
+            migrationBuilder.DropColumn(
                 name: "CompanyId",
+                table: "AspNetUsers");
+
+            migrationBuilder.DropColumn(
+                name: "Discriminator",
+                table: "AspNetUsers");
+
+            migrationBuilder.DropColumn(
+                name: "Name",
+                table: "AspNetUsers");
+
+            migrationBuilder.DropColumn(
+                name: "PostalCode",
+                table: "AspNetUsers");
+
+            migrationBuilder.DropColumn(
+                name: "State",
+                table: "AspNetUsers");
+
+            migrationBuilder.DropColumn(
+                name: "StreetAddress",
                 table: "AspNetUsers");
         }
     }

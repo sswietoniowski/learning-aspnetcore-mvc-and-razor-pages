@@ -7,24 +7,26 @@ $(document).ready(function () {
 function loadDataTable() {
     dataTable = $("#tblData").DataTable({
         "ajax": {
-            "url": "/Admin/Products/GetAll"
+            "url": "/Admin/Companies/GetAll"
         },
         "columns": [
-            { "data": "title", "width": "20%" },
-            { "data": "isbn", "width": "15%" },
-            { "data": "price", "width": "15%" },
-            { "data": "author", "width": "15%" },
-            { "data": "category.name", "width": "15%" },
+            { "data": "name", "width": "20%" },
+            { "data": "streetAddress", "width": "10%" },
+            { "data": "city", "width": "10%" },
+            { "data": "state", "width": "10%" },
+            { "data": "postalCode", "width": "10%" },
+            { "data": "phoneNumber", "width": "10%" },
+            { "data": "isAuthorizedCompany", "width": "10%" },
             {
                 "data": "id",
                 "render": function(data) {
                     return `
                         <div class="text-center">
-                            <a href="/Admin/Products/Upsert/${data}" class="btn btn-success text-white fas fa-edit">
+                            <a href="/Admin/Companies/Upsert/${data}" class="btn btn-success text-white fas fa-edit">
                                 <i style="cursor:pointer"></i>
                             </a>
                             <a class="btn btn-danger text-white fas fa-trash-alt"
-                                onclick=Delete('/Admin/Products/Delete/${data}')>
+                                onclick=Delete('/Admin/Companies/Delete/${data}')>
                                 <i style="cursor:pointer"></i>
                             </a>
                         </div>
