@@ -1,5 +1,6 @@
 ﻿@page
 @model RegisterModel
+@using BulkyBook.Utility
 @{
     ViewData["Title"] = "Register";
 }
@@ -57,6 +58,21 @@
                 <label asp-for="Input.ConfirmPassword"></label>
                 <span asp-validation-for="Input.ConfirmPassword" class="text-danger"></span>
             </div>
+            @if (User.IsInRole(SD.IdentityRole_Admin))
+            {
+                <div class="form-floating">
+                    @Html.DropDownListFor(m => m.Input.Role, Model.Input.RolesList, 
+                        "-Please select a role", new { @class = "form-control" })
+                    <label asp-for="Input.Role"></label>
+                    <span asp-validation-for="Input.Role" class="text-danger"></span>
+                </div>
+                <div class="form-floating">
+                    @Html.DropDownListFor(m => m.Input.CompanyId, Model.Input.CompaniesList, 
+                        "-Please select a company", new { @class = "form-control" })
+                    <label asp-for="Input.CompanyId"></label>
+                    <span asp-validation-for="Input.CompanyId" class="text-danger"></span>
+                </div>
+            }
             <button id="registerSubmit" type="submit" class="w-100 btn btn-lg btn-primary">Register</button>
         </form>
     </div>
