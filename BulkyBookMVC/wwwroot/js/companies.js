@@ -11,12 +11,21 @@ function loadDataTable() {
         },
         "columns": [
             { "data": "name", "width": "20%" },
-            { "data": "streetAddress", "width": "10%" },
+            { "data": "streetAddress", "width": "15%" },
             { "data": "city", "width": "10%" },
-            { "data": "state", "width": "10%" },
-            { "data": "postalCode", "width": "10%" },
+            { "data": "state", "width": "15%" },
             { "data": "phoneNumber", "width": "10%" },
-            { "data": "isAuthorizedCompany", "width": "10%" },
+            {
+                "data": "isAuthorizedCompany",
+                "render": function (data) {
+                    if (data) {
+                        return `<input type="checkbox" disabled checked />`
+                    } else {
+                        return `<input type="checkbox" disabled />`
+                    }
+                },
+                "width": "10%"
+            },
             {
                 "data": "id",
                 "render": function(data) {
