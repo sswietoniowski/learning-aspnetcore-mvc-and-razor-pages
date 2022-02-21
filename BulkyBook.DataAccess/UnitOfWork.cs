@@ -12,8 +12,10 @@ namespace BulkyBook.DataAccess
         public ICoverTypeRepository CoverTypes { get; }
         public IProductRepository Products { get; }
         public ICompanyRepository Companies { get; }
+        public IApplicationUserRepository ApplicationUsers { get; }
 
         public IStoredProcedureCall StoredProcedureCalls { get; }
+
 
         public UnitOfWork(ApplicationDbContext db)
         {
@@ -22,6 +24,7 @@ namespace BulkyBook.DataAccess
             CoverTypes = new CoverTypeRepository(_db);
             Products = new ProductRepository(_db);
             Companies = new CompanyRepository(_db);
+            ApplicationUsers = new ApplicationUserRepository(_db);
 
             StoredProcedureCalls = new StoredProcedureCall(_db);
         }
