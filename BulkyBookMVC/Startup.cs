@@ -39,6 +39,13 @@ namespace BulkyBook.MVC
                 options.LogoutPath = $"/Identity/Account/Logout";
                 options.AccessDeniedPath = $"/Identity/Account/AccessDenied";
             });
+            services.AddAuthentication()
+                .AddFacebook(options =>
+                {
+                    options.AppId = Configuration.GetValue<string>("ExternalAuthentication:Facebook:AppId");
+                    options.AppSecret = Configuration.GetValue<string>("ExternalAuthentication:Facebook:AppSecret");
+                });
+
 
             services.AddSingleton<IEmailSender, EmailSender>();
 

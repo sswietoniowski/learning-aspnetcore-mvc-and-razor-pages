@@ -6,6 +6,8 @@ using System.Security.Claims;
 using System.Text;
 using System.Text.Encodings.Web;
 using System.Threading.Tasks;
+using BulkyBook.Models;
+using BulkyBook.Utility;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI.Services;
@@ -51,6 +53,26 @@ namespace BulkyBook.MVC.Areas.Identity.Pages.Account
             [Required]
             [EmailAddress]
             public string Email { get; set; }
+
+            [Required]
+            [MaxLength(64)]
+            [Display(Name = "Name")]
+            public string Name { get; set; }
+            [MaxLength(128)]
+            [Display(Name = "Street")]
+            public string StreetAddress { get; set; }
+            [MaxLength(64)]
+            [Display(Name = "City")]
+            public string City { get; set; }
+            [MaxLength(64)]
+            [Display(Name = "State")]
+            public string State { get; set; }
+            [MaxLength(16)]
+            [Display(Name = "Postal Code")]
+            public string PostalCode { get; set; }
+            [MaxLength(16)]
+            [Display(Name = "Phone Number")]
+            public string PhoneNumber { get; set; }
         }
 
         public IActionResult OnGetAsync()
@@ -101,7 +123,8 @@ namespace BulkyBook.MVC.Areas.Identity.Pages.Account
                 {
                     Input = new InputModel
                     {
-                        Email = info.Principal.FindFirstValue(ClaimTypes.Email)
+                        Email = info.Principal.FindFirstValue(ClaimTypes.Email),
+                        Name = info.Principal.FindFirstValue(ClaimTypes.Name)
                     };
                 }
                 return Page();
@@ -121,11 +144,22 @@ namespace BulkyBook.MVC.Areas.Identity.Pages.Account
 
             if (ModelState.IsValid)
             {
-                var user = new IdentityUser { UserName = Input.Email, Email = Input.Email };
+                var user = new ApplicationUser
+                {
+                    UserName = Input.Email,
+                    Email = Input.Email,
+                    Name = Input.Name,
+                    PhoneNumber = Input.PhoneNumber,
+                    StreetAddress = Input.StreetAddress,
+                    City = Input.City,
+                    State = Input.State,
+                    PostalCode = Input.PostalCode,                    
+                };
 
                 var result = await _userManager.CreateAsync(user);
                 if (result.Succeeded)
                 {
+                    await _userManager.AddToRoleAsync(user, SD.IdentityRole_Customer_Individual);
                     result = await _userManager.AddLoginAsync(user, info);
                     if (result.Succeeded)
                     {
