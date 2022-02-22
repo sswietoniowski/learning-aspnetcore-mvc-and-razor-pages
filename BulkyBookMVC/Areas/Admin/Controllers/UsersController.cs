@@ -2,6 +2,7 @@
 using BulkyBook.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System;
 using System.Linq;
 
 namespace BulkyBook.MVC.Areas.Admin.Controllers
@@ -9,6 +10,7 @@ namespace BulkyBook.MVC.Areas.Admin.Controllers
     [Area("Admin")]
     public class UsersController : Controller
     {
+        private const int LOCKOUT_DURATION_IN_MINUTES = 15;
         private readonly ApplicationDbContext _db;
 
         public UsersController(ApplicationDbContext db)
@@ -45,6 +47,32 @@ namespace BulkyBook.MVC.Areas.Admin.Controllers
             });
 
             return Json(new { data = users });
+        }
+
+        [HttpPost]
+        public IActionResult LockUnlock([FromBody] string id)
+        {
+            var userFromDb = _db.ApplicationUsers.FirstOrDefault(u => u.Id == id);
+
+            if (userFromDb is null)
+            {
+                return Json(new { success = false, message = "Error while Locking/Unlocking" });
+            }
+
+            if (userFromDb.LockoutEnd is not null && userFromDb.LockoutEnd > DateTime.Now)
+            {
+                // unlock user
+                userFromDb.LockoutEnd = DateTime.Now;
+            }
+            else
+            {
+                // lock user
+                userFromDb.LockoutEnd = DateTime.Now.AddMinutes(LOCKOUT_DURATION_IN_MINUTES);
+                _db.SaveChanges();
+            }
+            _db.SaveChanges();
+
+            return Json(new { success = true, message = "Operation successful" });
         }
 
         #endregion
