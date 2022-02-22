@@ -26,7 +26,7 @@ function loadDataTable() {
                         <div class="text-center">
                             <a class="btn btn-danger text-white fas fa-lock-open"
                                 onclick=LockUnlock('${data.id}')>
-                                <i style="cursor:pointer"></i> Unlock
+                                <i style="cursor:pointer; width:100px"></i> Unlock
                             </a>
                         </div>
                         `
@@ -36,7 +36,7 @@ function loadDataTable() {
                         <div class="text-center">
                             <a class="btn btn-success text-white fas fa-lock"
                                 onclick=LockUnlock('${data.id}')>
-                                <i style="cursor:pointer"></i> Lock
+                                <i style="cursor:pointer; width:100px"></i> Lock
                             </a>
                         </div>
                         `
