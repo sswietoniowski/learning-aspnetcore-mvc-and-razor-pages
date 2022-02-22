@@ -51,6 +51,7 @@ namespace BulkyBook.MVC
                     options.ClientSecret = Configuration["ExternalAuthentication:Google:ClientSecret"];
                 });
 
+            services.Configure<SendgridOptions>(Configuration.GetSection("EmailSender:Sendgrid"));
             services.AddSingleton<IEmailSender, EmailSender>();
 
             services.AddScoped<IUnitOfWork, UnitOfWork>();
