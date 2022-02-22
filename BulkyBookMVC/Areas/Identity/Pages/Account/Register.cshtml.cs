@@ -201,7 +201,7 @@ namespace BulkyBook.MVC.Areas.Identity.Pages.Account
                         else
                         {
                             // admin is registering a new user we don't want him to logout
-                            return RedirectToAction("Index", "User", new { Area = "Admin" });
+                            return RedirectToAction("Index", "Users", new { Area = "Admin" });
                         }
                     }
                 }
