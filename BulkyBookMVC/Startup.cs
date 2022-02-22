@@ -44,8 +44,12 @@ namespace BulkyBook.MVC
                 {
                     options.AppId = Configuration.GetValue<string>("ExternalAuthentication:Facebook:AppId");
                     options.AppSecret = Configuration.GetValue<string>("ExternalAuthentication:Facebook:AppSecret");
+                })
+                .AddGoogle(options =>
+                {
+                    options.ClientId = Configuration["ExternalAuthentication:Google:ClientId"];
+                    options.ClientSecret = Configuration["ExternalAuthentication:Google:ClientSecret"];
                 });
-
 
             services.AddSingleton<IEmailSender, EmailSender>();
 
