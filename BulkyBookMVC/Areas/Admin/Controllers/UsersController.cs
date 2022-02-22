@@ -1,5 +1,7 @@
 ﻿using BulkyBook.DataAccess.Data;
 using BulkyBook.Models;
+using BulkyBook.Utility;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -8,6 +10,7 @@ using System.Linq;
 namespace BulkyBook.MVC.Areas.Admin.Controllers
 {
     [Area("Admin")]
+    [Authorize(Roles = $"{SD.IdentityRole_Admin},{SD.IdentityRole_Employee}")]
     public class UsersController : Controller
     {
         private const int LOCKOUT_DURATION_IN_MINUTES = 15;

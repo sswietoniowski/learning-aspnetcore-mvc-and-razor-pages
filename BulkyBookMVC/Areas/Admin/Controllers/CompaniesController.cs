@@ -1,10 +1,13 @@
 ﻿using BulkyBook.DataAccess;
 using BulkyBook.Models;
+using BulkyBook.Utility;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace BulkyBook.MVC.Areas.Admin.Controllers
 {
     [Area("Admin")]
+    [Authorize(Roles = $"{SD.IdentityRole_Admin},{SD.IdentityRole_Employee}")]
     public class CompaniesController : Controller
     {
         private readonly IUnitOfWork _unitOfWork;
@@ -29,7 +32,7 @@ namespace BulkyBook.MVC.Areas.Admin.Controllers
                 return View(company);
             }
 
-            company = _unitOfWork.Companies.Get(id.GetValueOrDefault());            
+            company = _unitOfWork.Companies.Get(id.GetValueOrDefault());
 
             if (company is null)
             {
