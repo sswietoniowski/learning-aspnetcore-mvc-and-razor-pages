@@ -15,9 +15,9 @@ namespace BulkyBook.Utility
             _sendgridOptions = options.Value;
         }
 
-        public async Task SendEmailAsync(string email, string subject, string message)
+        public async Task SendEmailAsync(string email, string subject, string htmlMessage)
         {
-            await Execute(_sendgridOptions.ApiKey, subject, message, email);
+            await Execute(_sendgridOptions.ApiKey, subject, htmlMessage, email);
         }
 
         private Task Execute(string sendgridApiKey, string subject, string message, string email)
@@ -26,7 +26,7 @@ namespace BulkyBook.Utility
             var client = new SendGridClient(apiKey);
             var from = new EmailAddress("admin@localhost", "BulkyBook Admin");
             var to = new EmailAddress(email, "End User");
-            var msg = MailHelper.CreateSingleEmail(from, to, subject, message, message);
+            var msg = MailHelper.CreateSingleEmail(from, to, subject, "", message);
             return client.SendEmailAsync(msg);
         }
     }
