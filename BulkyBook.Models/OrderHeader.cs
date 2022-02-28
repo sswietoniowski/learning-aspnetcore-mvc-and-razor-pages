@@ -9,8 +9,8 @@ namespace BulkyBook.Models
         [Key]
         public int Id { get; set; }
 
-        [ForeignKey(nameof(ApplicationUserId))]
         public string ApplicationUserId { get; set; }
+        [ForeignKey(nameof(ApplicationUserId))]
         public ApplicationUser ApplicationUser { get; set; }
 
         [Required]
@@ -18,6 +18,7 @@ namespace BulkyBook.Models
         [Required]
         public DateTime ShippingDate { get; set; }
         [Required]
+        [Column(TypeName = "decimal(18,2)")]
         public decimal OrderTotal { get; set; }
         public string TrackingNumber { get; set; }
         public string Carrier { get; set; }
