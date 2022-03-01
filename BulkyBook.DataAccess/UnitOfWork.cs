@@ -16,6 +16,11 @@ namespace BulkyBook.DataAccess
 
         public IStoredProcedureCall StoredProcedureCalls { get; }
 
+        public IShoppingCartRepository ShoppingCarts { get; }
+
+        public IOrderHeaderRepository OrderHeaders { get; }
+
+        public IOrderDetailRepository OrderDetails { get; }
 
         public UnitOfWork(ApplicationDbContext db)
         {
@@ -25,6 +30,9 @@ namespace BulkyBook.DataAccess
             Products = new ProductRepository(_db);
             Companies = new CompanyRepository(_db);
             ApplicationUsers = new ApplicationUserRepository(_db);
+            ShoppingCarts = new ShoppingCartRepository(_db);
+            OrderHeaders = new OrderHeaderRepository(_db);
+            OrderDetails = new OrderDetailRepository(_db);
 
             StoredProcedureCalls = new StoredProcedureCall(_db);
         }

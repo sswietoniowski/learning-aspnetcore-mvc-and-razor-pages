@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace BulkyBook.Models
 {
-    public class OrderDetails
+    public class OrderDetail
     {
         [Key]
         public int Id { get; set; }
