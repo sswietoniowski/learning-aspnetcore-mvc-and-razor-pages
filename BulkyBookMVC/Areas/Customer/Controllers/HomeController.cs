@@ -1,4 +1,5 @@
 ﻿using BulkyBook.DataAccess;
+using BulkyBook.Models;
 using BulkyBook.Models.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
@@ -29,11 +30,18 @@ namespace BulkyBook.MVC.Areas.Customer.Controllers
             return View();
         }
 
-        public IActionResult Detail()
+        public IActionResult Details(int id)
         {
-            return View();
+            var productFromDb = _unitOfWork.Products
+                .GetFirstOrDefault(p => p.Id == id, includeProperties: "Category,CoverType");
+            ShoppingCart shoppingCart = new ShoppingCart()
+            {
+                Product = productFromDb,
+                ProductId = productFromDb.Id
+            };
+            return View(shoppingCart);
         }
-        
+
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()
         {
