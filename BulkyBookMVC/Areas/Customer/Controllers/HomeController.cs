@@ -64,8 +64,8 @@ namespace BulkyBook.MVC.Areas.Customer.Controllers
                 }
                 else
                 {
-                    shoppingCart.Count += shoppingCartFromDb.Count;
-                    _unitOfWork.ShoppingCarts.Update(shoppingCart);
+                    shoppingCartFromDb.Count += shoppingCart.Count;
+                    //_unitOfWork.ShoppingCarts.Update(shoppingCartFromDb); // not really needed
                 }
                 _unitOfWork.Save();
 
