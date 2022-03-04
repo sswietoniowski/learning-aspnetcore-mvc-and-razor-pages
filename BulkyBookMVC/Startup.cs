@@ -10,6 +10,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using System;
 using System.Collections.Generic;
 using System.Globalization;
 
@@ -17,6 +18,8 @@ namespace BulkyBook.MVC
 {
     public class Startup
     {
+        private const int _SESSION_IDDLE_TIMEOUT_IN_MINUTES = 30;
+
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
@@ -51,6 +54,13 @@ namespace BulkyBook.MVC
                     options.ClientSecret = Configuration["ExternalAuthentication:Google:ClientSecret"];
                 });
 
+            services.AddSession(options =>
+            {
+                options.IdleTimeout = TimeSpan.FromMinutes(_SESSION_IDDLE_TIMEOUT_IN_MINUTES);
+                options.Cookie.HttpOnly = true;
+                options.Cookie.IsEssential = true;
+            });
+
             services.Configure<SendgridOptions>(Configuration.GetSection("EmailSender:Sendgrid"));
             services.AddSingleton<IEmailSender, EmailSender>();
 
@@ -79,6 +89,8 @@ namespace BulkyBook.MVC
             app.UseStaticFiles();
 
             app.UseRouting();
+
+            app.UseSession();
 
             app.UseAuthentication();
             app.UseAuthorization();

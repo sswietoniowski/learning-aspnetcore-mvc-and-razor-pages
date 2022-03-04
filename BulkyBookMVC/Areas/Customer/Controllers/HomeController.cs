@@ -1,10 +1,13 @@
 ﻿using BulkyBook.DataAccess;
 using BulkyBook.Models;
 using BulkyBook.Models.ViewModels;
+using BulkyBook.Utility;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using System.Diagnostics;
+using System.Linq;
 using System.Security.Claims;
 
 namespace BulkyBook.MVC.Areas.Customer.Controllers
@@ -68,6 +71,14 @@ namespace BulkyBook.MVC.Areas.Customer.Controllers
                     //_unitOfWork.ShoppingCarts.Update(shoppingCartFromDb); // not really needed
                 }
                 _unitOfWork.Save();
+
+                var count = _unitOfWork.ShoppingCarts
+                    .GetAll(c => c.ApplicationUserId == shoppingCart.ApplicationUserId).Count();
+
+                // We could store anything, so that's why we have an extension method
+                //HttpContext.Session.SetObject(SD.Session_ShoppingCart, count);
+                // This method on the other hand is built in
+                HttpContext.Session.SetInt32(SD.Session_ShoppingCart, count);
 
                 return RedirectToAction(nameof(Index));
             }

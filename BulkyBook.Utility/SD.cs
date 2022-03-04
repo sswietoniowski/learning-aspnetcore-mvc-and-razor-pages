@@ -15,6 +15,8 @@ namespace BulkyBook.Utility
         public const string IdentityRole_Admin = "Admin";
         public const string IdentityRole_Employee = "Employee";
 
+        public const string Session_ShoppingCart = "Shopping Cart Session";
+
         public static decimal GetPriceBasedOnQuantity(int quantity, decimal price, decimal price50, decimal price100) => quantity switch
         {
             (>= 0) and (< 50) => price,
