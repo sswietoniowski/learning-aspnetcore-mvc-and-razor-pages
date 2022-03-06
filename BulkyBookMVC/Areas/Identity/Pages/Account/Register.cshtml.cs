@@ -183,7 +183,7 @@ namespace BulkyBook.MVC.Areas.Identity.Pages.Account
                     var callbackUrl = Url.Page(
                         "/Account/ConfirmEmail",
                         pageHandler: null,
-                        values: new { area = "Identity", userId = user.Id, code = code },
+                        values: new { area = "Identity", userId = user.Id, code = code, ReturnUrl = returnUrl },
                         protocol: Request.Scheme);
 
                     await _emailSender.SendEmailAsync(Input.Email, "Confirm your email",
@@ -212,6 +212,23 @@ namespace BulkyBook.MVC.Areas.Identity.Pages.Account
                     ModelState.AddModelError(string.Empty, error.Description);
                 }
             }
+
+            Input = new InputModel
+            {
+                CompaniesList = _unitOfWork.Companies.GetAll()
+                    .Select(item => new SelectListItem()
+                    {
+                        Text = item.Name,
+                        Value = item.Id.ToString()
+                    }),
+                RolesList = _roleManager.Roles
+                    .Where(r => r.Name != SD.IdentityRole_Customer_Individual)
+                    .Select(item => new SelectListItem
+                    {
+                        Text = item.Name,
+                        Value = item.Name
+                    })
+            };
 
             // If we got this far, something failed, redisplay form
             return Page();
