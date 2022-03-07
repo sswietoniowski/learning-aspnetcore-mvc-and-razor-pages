@@ -108,7 +108,7 @@
                             @{
                                 var orderTotalForStripe = Model.OrderHeader.OrderTotal * 100;
                             }
-                            <script src="https://checkout.stripe.com/checkout.js" class="stripe-button"
+@*                            <script src="https://checkout.stripe.com/checkout.js" class="stripe-button"
                                 data-key="@Stripe.Value.PublishableKey"
                                 data-amount="@orderTotalForStripe"
                                 data-name="BulkyBookMVC"
@@ -121,7 +121,7 @@
                             <script>
                                 document.getElementsByClassName("stripe-button-el")[0].style.display = 'none';
                             </script>
-                            <button type="submit" value="Place Order" class="btn btn-success form-control">Place Order</button>
+*@                            <button type="submit" value="Place Order" class="btn btn-success form-control">Place Order</button>
                         </div>
                     </div>
                 </div>
