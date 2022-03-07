@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.WebUtilities;
+using Stripe;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -172,7 +173,7 @@ namespace BulkyBook.MVC.Areas.Customer.Controllers
         [HttpPost]
         [ActionName("Summary")]
         [ValidateAntiForgeryToken]
-        public IActionResult SummaryPost()
+        public IActionResult SummaryPost(string stripeToken)
         {
             var claimsIdentity = (ClaimsIdentity)User.Identity;
             var claim = claimsIdentity.FindFirst(ClaimTypes.NameIdentifier);
@@ -211,6 +212,42 @@ namespace BulkyBook.MVC.Areas.Customer.Controllers
             _unitOfWork.Save();
 
             HttpContext.Session.SetInt32(SD.Session_ShoppingCart, 0);
+
+            if (stripeToken is null)
+            {
+
+            }
+            else
+            {
+                // process the payment
+                var options = new ChargeCreateOptions
+                {
+                    Amount = Convert.ToInt32(ShoppingCartViewModel.OrderHeader.OrderTotal * 100),
+                    Currency = "usd",
+                    Description = "Order ID : " + ShoppingCartViewModel.OrderHeader.Id,
+                    Source = stripeToken
+                };
+
+                var service = new ChargeService();
+                Charge charge = service.Create(options);
+
+                if (charge.BalanceTransactionId is null)
+                {
+                    ShoppingCartViewModel.OrderHeader.PaymentStatus = SD.PaymentStatus_Rejected;
+                }
+                else
+                {
+                    ShoppingCartViewModel.OrderHeader.TransactionId = charge.BalanceTransactionId;
+                }
+                if (charge.Status.ToLower() == "succeeded")
+                {
+                    ShoppingCartViewModel.OrderHeader.PaymentStatus = SD.PaymentStatus_Approved;
+                    ShoppingCartViewModel.OrderHeader.OrderStatus = SD.OrderStatus_Approved;
+                    ShoppingCartViewModel.OrderHeader.PaymentDate = DateTime.Now;
+                }
+            }
+
+            _unitOfWork.Save();
 
             return RedirectToAction(nameof(OrderConfirmation), new { id = ShoppingCartViewModel.OrderHeader.Id });
         }
