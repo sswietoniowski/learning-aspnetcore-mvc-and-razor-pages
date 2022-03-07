@@ -10,6 +10,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Stripe;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
@@ -62,6 +63,7 @@ namespace BulkyBook.MVC
             });
 
             services.Configure<SendgridOptions>(Configuration.GetSection("EmailSender:Sendgrid"));
+            services.Configure<StripeOptions>(Configuration.GetSection("Payments:Stripe"));
             services.AddSingleton<IEmailSender, EmailSender>();
 
             services.AddScoped<IUnitOfWork, UnitOfWork>();
@@ -89,6 +91,8 @@ namespace BulkyBook.MVC
             app.UseStaticFiles();
 
             app.UseRouting();
+
+            StripeConfiguration.ApiKey = Configuration.GetSection("Payments:Stripe")["SecretKey"];
 
             app.UseSession();
 
