@@ -94,7 +94,7 @@ namespace BulkyBook.MVC.Areas.Customer.Controllers
             var shoppingCart = _unitOfWork.ShoppingCarts
                 .GetFirstOrDefault(sc => sc.Id == cartId, includeProperties: "Product");
             shoppingCart.Count++;
-            shoppingCart.Price = SD.GetPriceBasedOnQuantity(shoppingCart.Count, 
+            shoppingCart.Price = SD.GetPriceBasedOnQuantity(shoppingCart.Count,
                 shoppingCart.Product.Price, shoppingCart.Product.Price50, shoppingCart.Product.Price100);
             _unitOfWork.Save();
 
@@ -134,6 +134,36 @@ namespace BulkyBook.MVC.Areas.Customer.Controllers
             HttpContext.Session.SetInt32(SD.Session_ShoppingCart, count - 1);
 
             return RedirectToAction(nameof(Index));
+        }
+
+        public IActionResult Summary()
+        {
+            var claimsIdentity = (ClaimsIdentity)User.Identity;
+            var claim = claimsIdentity.FindFirst(ClaimTypes.NameIdentifier);
+
+            ShoppingCartViewModel = new ShoppingCartViewModel
+            {
+                OrderHeader = new OrderHeader(),
+                ListCart = _unitOfWork.ShoppingCarts
+                    .GetAll(sc => sc.ApplicationUserId == claim.Value, includeProperties: "Product")
+            };
+
+            ShoppingCartViewModel.OrderHeader.ApplicationUser = _unitOfWork.ApplicationUsers
+                .GetFirstOrDefault(u => u.Id == claim.Value, includeProperties: "Company");
+
+            foreach (var list in ShoppingCartViewModel.ListCart)
+            {
+                list.Price = SD.GetPriceBasedOnQuantity(list.Count, list.Product.Price, list.Product.Price50, list.Product.Price100);
+                ShoppingCartViewModel.OrderHeader.OrderTotal += (list.Price * list.Count);
+            }
+
+            ShoppingCartViewModel.OrderHeader.Name = ShoppingCartViewModel.OrderHeader.ApplicationUser.Name;
+            ShoppingCartViewModel.OrderHeader.PhoneNumber = ShoppingCartViewModel.OrderHeader.ApplicationUser.PhoneNumber;
+            ShoppingCartViewModel.OrderHeader.StreetAddress = ShoppingCartViewModel.OrderHeader.ApplicationUser.StreetAddress;
+            ShoppingCartViewModel.OrderHeader.City = ShoppingCartViewModel.OrderHeader.ApplicationUser.City;
+            ShoppingCartViewModel.OrderHeader.PostalCode = ShoppingCartViewModel.OrderHeader.ApplicationUser.PostalCode;
+
+            return View(ShoppingCartViewModel);
         }
     }
 }
