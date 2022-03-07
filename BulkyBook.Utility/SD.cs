@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace BulkyBook.Utility
+﻿namespace BulkyBook.Utility
 {
     public static class SD
     {
@@ -16,6 +14,18 @@ namespace BulkyBook.Utility
         public const string IdentityRole_Employee = "Employee";
 
         public const string Session_ShoppingCart = "Shopping Cart Session";
+
+        public const string OrderStatus_Pending = "Pending";
+        public const string OrderStatus_Approved = "Approved";
+        public const string OrderStatus_InProcess = "Processing";
+        public const string OrderStatus_Shipped = "Shipped";
+        public const string OrderStatus_Cancelled = "Cancelled";
+        public const string OrderStatus_Refunded = "Refunded";
+
+        public const string PaymentStatus_Pending = "Pending";
+        public const string PaymentStatus_Approved = "Approved";
+        public const string PaymentStatus_DelayedPayment = "ApprovedForDelayedPayment";
+        public const string PaymentStatus_Rejected = "Rejected";
 
         public static decimal GetPriceBasedOnQuantity(int quantity, decimal price, decimal price50, decimal price100) => quantity switch
         {

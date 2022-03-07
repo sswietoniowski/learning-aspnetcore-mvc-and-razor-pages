@@ -7,6 +7,8 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.WebUtilities;
+using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
 using System.Text;
@@ -164,6 +166,55 @@ namespace BulkyBook.MVC.Areas.Customer.Controllers
             ShoppingCartViewModel.OrderHeader.PostalCode = ShoppingCartViewModel.OrderHeader.ApplicationUser.PostalCode;
 
             return View(ShoppingCartViewModel);
+        }
+
+        [HttpPost]
+        [ActionName("Summary")]
+        [ValidateAntiForgeryToken]
+        public IActionResult SummaryPost()
+        {
+            var claimsIdentity = (ClaimsIdentity)User.Identity;
+            var claim = claimsIdentity.FindFirst(ClaimTypes.NameIdentifier);
+            ShoppingCartViewModel.OrderHeader.ApplicationUser = _unitOfWork.ApplicationUsers
+                .GetFirstOrDefault(u => u.Id == claim.Value, includeProperties: "Company");
+
+            ShoppingCartViewModel.ListCart = _unitOfWork.ShoppingCarts
+                .GetAll(sc => sc.ApplicationUserId == claim.Value, includeProperties: "Product");
+
+            ShoppingCartViewModel.OrderHeader.PaymentStatus = SD.PaymentStatus_Pending;
+            ShoppingCartViewModel.OrderHeader.OrderStatus = SD.OrderStatus_Pending;
+            ShoppingCartViewModel.OrderHeader.ApplicationUserId = claim.Value;
+            ShoppingCartViewModel.OrderHeader.OrderDate = DateTime.Now;
+
+            _unitOfWork.OrderHeaders.Add(ShoppingCartViewModel.OrderHeader);
+
+            List<OrderDetail> orderDetails = new List<OrderDetail>();
+            foreach (var item in ShoppingCartViewModel.ListCart)
+            {
+                OrderDetail orderDetail = new OrderDetail
+                {
+                    ProductId = item.ProductId,
+                    OrderId = ShoppingCartViewModel.OrderHeader.Id,
+                    Price = item.Price,
+                    Count = item.Count
+                };
+                ShoppingCartViewModel.OrderHeader.OrderTotal += orderDetail.Count * orderDetail.Price;
+                _unitOfWork.OrderDetails.Add(orderDetail);
+                orderDetails.Add(orderDetail);
+            }
+
+            _unitOfWork.ShoppingCarts.RemoveRange(ShoppingCartViewModel.ListCart);
+
+            _unitOfWork.Save();
+
+            HttpContext.Session.SetInt32(SD.Session_ShoppingCart, 0);
+
+            return RedirectToAction(nameof(OrderConfirmation), new { id = ShoppingCartViewModel.OrderHeader.Id });
+        }
+
+        public IActionResult OrderConfirmation()
+        {
+            return View();
         }
     }
 }
