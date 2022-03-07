@@ -215,7 +215,9 @@ namespace BulkyBook.MVC.Areas.Customer.Controllers
 
             if (stripeToken is null)
             {
-
+                ShoppingCartViewModel.OrderHeader.PaymentStatus = SD.PaymentStatus_DelayedPayment;
+                ShoppingCartViewModel.OrderHeader.PaymentDueDate = DateTime.Now.AddDays(30);
+                ShoppingCartViewModel.OrderHeader.OrderStatus = SD.OrderStatus_Approved;
             }
             else
             {
