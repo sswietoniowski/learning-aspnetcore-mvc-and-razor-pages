@@ -205,25 +205,29 @@
                                     <span class="text-primary">Order Summary</span>
                                 </h4>
                                 <ul class="list-group mb-3">
+                                    @foreach (var detail in Model.OrderDetails)
+                                    {
                                         <li class="list-group-item d-flex justify-content-between">
                                             <div class="row container">
                                                 <div class="col-8">
-                                                    <h6 class="my-0">--Product.Title--</h6>
-                                                    <small class="text-muted">Price : --Price--</small>
-                                                    <small class="text-muted">Quantity : --Count--</small>
+                                                    <input type="hidden" asp-for="@detail.Id" />
+                                                    <h6 class="my-0">@detail.Product.Title</h6>
+                                                    <small class="text-muted">Price : @detail.Price.ToString("c")</small>
+                                                    <small class="text-muted">Quantity : @detail.Count</small>
                                                 </div>
                                                 <div class="col-4">
-                                                    <h5 class="text-success">--price*count--</h5>
+                                                    <h5 class="text-success">@(String.Format("{0:C}", detail.Price * detail.Count))</h5>
                                                 </div>
                                             </div>
                                         </li>
+                                    }
                                     <li class="list-group-item bg-info">
                                         <div class="row container">
                                             <div class="col-6">
                                                 <h5 class="text-white">TOTAL </h5>
                                             </div>
                                             <div class="col-6 text-right">
-                                                <h5 class="text-white">--GRAND TOTAL-</h5>
+                                                <h5 class="text-white">@Model.OrderHeader.OrderTotal</h5>
                                             </div>
                                         </div>
                                     </li>
