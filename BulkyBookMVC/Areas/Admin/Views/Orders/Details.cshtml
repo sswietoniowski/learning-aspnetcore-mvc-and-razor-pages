@@ -1,4 +1,6 @@
-﻿@model OrderDetailsViewModel
+﻿const jqueryValidate = require("../../../../wwwroot/lib/jquery-validation/dist/jquery.validate");
+
+@model OrderDetailsViewModel
 @using BulkyBook.Utility
 @{
     var isReadOnly = true;
@@ -232,8 +234,24 @@
                                         </div>
                                     </li>
                                 </ul>
-                                
-                            </div>
+                                @if (User.IsInRole(SD.IdentityRole_Admin) || User.IsInRole(SD.IdentityRole_Employee))
+                                {
+                                    <br />
+                                    @if (Model.OrderHeader.OrderStatus == SD.OrderStatus_Approved)
+                                    {
+                                        <a asp-action="StartProcessing" asp-route-id="@Model.OrderHeader.Id" class="btn btn-primary form-control">Start Processing</a>
+                                    }
+                                    @if (Model.OrderHeader.OrderStatus == SD.OrderStatus_InProcess)
+                                    {
+                                        <input type="submit" value="Ship Order" onclick="validateInput()" 
+                                            class="btn btn-primary form-control" formaction="/Admin/Orders/ShipOrder" formmethod="post" />
+                                }
+                            }
+                            else
+                            {
+                                <label class="btn btn-primary form-control">@Model.OrderHeader.OrderStatus</label> 
+                            }
+                        </div>
                         </div>
                     </div>
                 </div>
