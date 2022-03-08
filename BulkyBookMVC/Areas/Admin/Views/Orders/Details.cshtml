@@ -216,7 +216,7 @@
                                                     <small class="text-muted">Quantity : @detail.Count</small>
                                                 </div>
                                                 <div class="col-4">
-                                                    <h5 class="text-success">@(String.Format("{0:C}", detail.Price * detail.Count))</h5>
+                                                    <p class="text-success">@(String.Format("{0:C}", detail.Price * detail.Count))</p>
                                                 </div>
                                             </div>
                                         </li>
@@ -227,7 +227,7 @@
                                                 <h5 class="text-white">TOTAL </h5>
                                             </div>
                                             <div class="col-6 text-right">
-                                                <h5 class="text-white">@Model.OrderHeader.OrderTotal</h5>
+                                                <h5 class="text-white">@Model.OrderHeader.OrderTotal.ToString("c")</h5>
                                             </div>
                                         </div>
                                     </li>
