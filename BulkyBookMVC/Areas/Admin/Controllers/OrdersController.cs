@@ -56,9 +56,9 @@ namespace BulkyBook.MVC.Areas.Admin.Controllers
 
         [Authorize(Roles = SD.IdentityRole_Admin + "," + SD.IdentityRole_Employee)]
         [HttpPost]
-        public IActionResult ShipOrder(int id)
+        public IActionResult ShipOrder()
         {
-            var orderHeader = _unitOfWork.OrderHeaders.GetFirstOrDefault(oh => oh.Id == id);
+            var orderHeader = _unitOfWork.OrderHeaders.GetFirstOrDefault(oh => oh.Id == OrderDetailsViewModel.OrderHeader.Id);
             orderHeader.TrackingNumber = OrderDetailsViewModel.OrderHeader.TrackingNumber;
             orderHeader.Carrier = OrderDetailsViewModel.OrderHeader.Carrier;
             orderHeader.ShippingDate = DateTime.Now;
