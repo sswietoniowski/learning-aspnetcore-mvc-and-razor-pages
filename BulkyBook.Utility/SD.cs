@@ -26,6 +26,8 @@
         public const string PaymentStatus_Approved = "Approved";
         public const string PaymentStatus_DelayedPayment = "ApprovedForDelayedPayment";
         public const string PaymentStatus_Rejected = "Rejected";
+        public const string PaymentStatus_Canceled = "Canceled";
+        public const string PaymentStatus_Refunded = "Refunded";
 
         public static decimal GetPriceBasedOnQuantity(int quantity, decimal price, decimal price50, decimal price100) => quantity switch
         {
