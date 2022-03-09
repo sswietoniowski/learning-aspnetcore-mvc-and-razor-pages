@@ -1,5 +1,7 @@
 ﻿@model OrderDetailsViewModel
 @using BulkyBook.Utility
+@using Microsoft.Extensions.Options
+@inject IOptions<StripeOptions> Stripe
 @{
     var isReadOnly = true;
     var isAdmin = false;
@@ -248,6 +250,28 @@
                             else
                             {
                                 <label class="btn btn-primary form-control">@Model.OrderHeader.OrderStatus</label> 
+                            }
+
+                            @{
+                                var orderTotalForStripe = Model.OrderHeader.OrderTotal * 100;
+                            }
+                            @if (Model.OrderHeader.PaymentStatus == SD.PaymentStatus_DelayedPayment
+                                && Model.OrderHeader.OrderStatus == SD.OrderStatus_Shipped)
+                            {
+                                <script src="https://checkout.stripe.com/checkout.js" class="stripe-button"
+                                data-key="@Stripe.Value.PublishableKey"
+                                data-amount="@orderTotalForStripe"
+                                data-name="BulkyBookMVC"
+                                data-label="Place Order"
+                                data-description="Get Books, For Less"
+                                data-locale="auto"
+                                data-allow-remember-me="false"
+                                data-image="http://stripe.com/img/documentation/checkout/marketplace.png">
+                                </script>
+                                <script>
+                                    document.getElementsByClassName("stripe-button-el")[0].style.display = 'none';
+                                </script>
+                                <button type="submit" value="Place Order" class="btn btn-success form-control">Pay Now</button>
                             }
 
                             @if (Model.OrderHeader.OrderStatus != SD.OrderStatus_Refunded 

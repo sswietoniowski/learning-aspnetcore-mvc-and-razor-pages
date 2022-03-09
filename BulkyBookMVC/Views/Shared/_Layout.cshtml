@@ -56,9 +56,18 @@
                                 </div>
                             </li>
                         }
-                        <li class="nav-item">
-                            <a class="nav-link" asp-area="Admin" asp-controller="Orders" asp-action="Index">Orders</a>
-                        </li>
+                        @if (User.IsInRole(SD.IdentityRole_Admin) || User.IsInRole(SD.IdentityRole_Employee)) 
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link" asp-area="Admin" asp-controller="Orders" asp-action="Index">Manage Orders</a>
+                            </li>
+                        }
+                        else
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link" asp-area="Admin" asp-controller="Orders" asp-action="Index">Orders</a>
+                            </li>
+                        }
                         @if (HttpContextAccessor.HttpContext.Session.GetInt32(SD.Session_ShoppingCart) is not null)
                         {
                             <li style="color:white;">
