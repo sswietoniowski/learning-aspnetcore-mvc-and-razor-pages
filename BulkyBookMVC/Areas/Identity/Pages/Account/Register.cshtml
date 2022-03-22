@@ -5,7 +5,7 @@
     ViewData["Title"] = "Register";
 }
 
-<div class="py-4 my-4">
+<div class="py-4">
     <div asp-validation-summary="ModelOnly" class="text-danger"></div>
     <div class="row form-group">
         <div class="col-8 offset-2">
@@ -33,7 +33,7 @@
                         </div>
                         <div class="py-2 input-group">
                             <div class="input-group-prepend">
-                                +48
+                                <span class="input-group-text">+48</span>
                             </div>
                             <input asp-for="Input.PhoneNumber" class="form-control" placeholder="Phone Number" aria-required="true" />
                             <span asp-validation-for="Input.PhoneNumber" class="text-danger"></span>
@@ -101,7 +101,8 @@
                                             {
                                                 <button type="submit" class="btn btn-block facebook-btn form-control" 
                                                     name="provider" value="@provider.Name" 
-                                                    title="Log in using your @provider.DisplayName account">@provider.DisplayName
+                                                    title="Log in using your @provider.DisplayName account">
+                                                        <i class="fab fa-facebook-square"></i> @provider.DisplayName
                                                 </button>
                                             }
                                             else
@@ -110,7 +111,8 @@
                                                 {
                                                     <button type="submit" class="btn btn-block google-btn form-control" 
                                                     name="provider" value="@provider.Name" 
-                                                    title="Log in using your @provider.DisplayName account">@provider.DisplayName
+                                                    title="Log in using your @provider.DisplayName account">
+                                                        <i class="fab fa-google"></i> @provider.DisplayName
                                                     </button>
                                                 }
                                                 else
