@@ -66,8 +66,10 @@ namespace BulkyBook.MVC
             services.Configure<SendgridOptions>(Configuration.GetSection("EmailSender:Sendgrid"));
             services.Configure<TwilioOptions>(Configuration.GetSection("SmsSender:Twilio"));
             services.Configure<StripeOptions>(Configuration.GetSection("Payments:Stripe"));
+            services.Configure<BrainTreeOptions>(Configuration.GetSection("Payments:BrainTree"));
             services.AddSingleton<IEmailSender, EmailSender>();
             services.AddSingleton<ITempDataProvider, CookieTempDataProvider>();
+            services.AddSingleton<IBrainTreeGateway, BrainTreeGateway>();
 
             services.AddScoped<IUnitOfWork, UnitOfWork>();
 

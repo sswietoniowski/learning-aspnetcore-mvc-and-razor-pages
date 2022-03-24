@@ -270,7 +270,7 @@ namespace BulkyBook.MVC.Areas.Customer.Controllers
                     from: new Twilio.Types.PhoneNumber(_twilioOptions.PhoneNumber),
                     to: new Twilio.Types.PhoneNumber(orderHeader.PhoneNumber));
             }
-            catch (Exception exception)
+            catch (Exception)
             {
                 throw;
             }
