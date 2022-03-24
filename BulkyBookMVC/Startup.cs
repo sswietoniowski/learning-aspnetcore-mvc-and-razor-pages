@@ -63,6 +63,7 @@ namespace BulkyBook.MVC
             });
 
             services.Configure<SendgridOptions>(Configuration.GetSection("EmailSender:Sendgrid"));
+            services.Configure<TwilioOptions>(Configuration.GetSection("SmsSender:Twilio"));
             services.Configure<StripeOptions>(Configuration.GetSection("Payments:Stripe"));
             services.AddSingleton<IEmailSender, EmailSender>();
 

@@ -24,6 +24,7 @@
     <PackageReference Include="Microsoft.Extensions.Identity.Core" Version="6.0.2" />
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="6.0.2" />
     <PackageReference Include="Stripe.net" Version="39.95.0" />
+    <PackageReference Include="Twilio" Version="5.73.0" />
   </ItemGroup>
 
   <ItemGroup>
