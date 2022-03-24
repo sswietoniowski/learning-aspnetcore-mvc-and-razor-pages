@@ -99,12 +99,14 @@ namespace BulkyBook.MVC.Areas.Admin.Controllers
             var categoryFromDb = _unitOfWork.Categories.Get(id);
             if (categoryFromDb is null)
             {
+                TempData["Error"] = "Error while deleting";
                 return Json(new { success = false, message = "Error while deleting" });
             }
 
             _unitOfWork.Categories.Remove(categoryFromDb);
             _unitOfWork.Save();
 
+            TempData["Success"] = "Delete successful";
             return Json(new { success = true, message = "Delete successful" });
         }
 

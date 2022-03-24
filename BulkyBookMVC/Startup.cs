@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Localization;
+using Microsoft.AspNetCore.Mvc.ViewFeatures;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -66,6 +67,7 @@ namespace BulkyBook.MVC
             services.Configure<TwilioOptions>(Configuration.GetSection("SmsSender:Twilio"));
             services.Configure<StripeOptions>(Configuration.GetSection("Payments:Stripe"));
             services.AddSingleton<IEmailSender, EmailSender>();
+            services.AddSingleton<ITempDataProvider, CookieTempDataProvider>();
 
             services.AddScoped<IUnitOfWork, UnitOfWork>();
 
