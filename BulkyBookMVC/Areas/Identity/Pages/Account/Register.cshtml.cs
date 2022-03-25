@@ -3,6 +3,7 @@ using BulkyBook.Models;
 using BulkyBook.Utility;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;
@@ -13,6 +14,7 @@ using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Text.Encodings.Web;
@@ -29,6 +31,7 @@ namespace BulkyBook.MVC.Areas.Identity.Pages.Account
         private readonly UserManager<IdentityUser> _userManager;
         private readonly ILogger<RegisterModel> _logger;
         private readonly IEmailSender _emailSender;
+        private readonly IWebHostEnvironment _webHostEnvironment;
 
         public RegisterModel(
             UserManager<IdentityUser> userManager,
@@ -36,7 +39,8 @@ namespace BulkyBook.MVC.Areas.Identity.Pages.Account
             RoleManager<IdentityRole> roleManager,
             IUnitOfWork unitOfWork,
             ILogger<RegisterModel> logger,
-            IEmailSender emailSender)
+            IEmailSender emailSender,
+            IWebHostEnvironment webHostEnvironment)
         {
             _userManager = userManager;
             _signInManager = signInManager;
@@ -44,6 +48,7 @@ namespace BulkyBook.MVC.Areas.Identity.Pages.Account
             _unitOfWork = unitOfWork;
             _logger = logger;
             _emailSender = emailSender;
+            this._webHostEnvironment = webHostEnvironment;
         }
 
         [BindProperty]
@@ -186,8 +191,31 @@ namespace BulkyBook.MVC.Areas.Identity.Pages.Account
                         values: new { area = "Identity", userId = user.Id, code = code, ReturnUrl = returnUrl },
                         protocol: Request.Scheme);
 
-                    await _emailSender.SendEmailAsync(Input.Email, "Confirm your email",
-                        $"Please confirm your account by <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'>clicking here</a>.");
+                    var pathToFile = _webHostEnvironment.WebRootPath
+                        + Path.DirectorySeparatorChar.ToString() + "templates"
+                        + Path.DirectorySeparatorChar.ToString() + "Confirm_Account_Registration.html";
+
+                    var subject = "Confirm Account Registration";
+                    string htmlBody = "";
+                    using StreamReader streamReader = System.IO.File.OpenText(pathToFile);
+                    htmlBody = streamReader.ReadToEnd();
+                    // {0}: Subject
+                    // {1}: DateTime
+                    // {2}: Name
+                    // {3}: Email
+                    // {4}: Message
+                    // {5}: CallbackUrl
+                    string message = $"Please confirm your account by <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'>clicking here</a>.";
+                    string messageBody = string.Format(htmlBody, 
+                        subject, 
+                        String.Format("{0:dddd, d MMMM yyyy", DateTime.Now), 
+                        user.Name, 
+                        user.Email, 
+                        message, 
+                        callbackUrl);
+
+                    await _emailSender.SendEmailAsync(Input.Email, "Confirm your email", messageBody);
+                        
 
                     if (_userManager.Options.SignIn.RequireConfirmedAccount)
                     {
