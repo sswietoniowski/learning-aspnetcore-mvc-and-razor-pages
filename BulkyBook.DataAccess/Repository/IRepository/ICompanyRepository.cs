@@ -1,9 +1,8 @@
 ﻿using BulkyBook.Models;
 
-namespace BulkyBook.DataAccess.Repository.IRepository
+namespace BulkyBook.DataAccess.Repository.IRepository;
+
+public interface ICompanyRepository : IRepository<Company>
 {
-    public interface ICompanyRepository : IRepository<Company>
-    {
-        void Update(Company company);
-    }
+    void Update(Company company);
 }

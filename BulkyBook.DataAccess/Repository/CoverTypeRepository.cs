@@ -2,21 +2,20 @@
 using BulkyBook.Models;
 using Microsoft.EntityFrameworkCore;
 
-namespace BulkyBook.DataAccess.Repository
-{
-    public class CoverTypeRepository : Repository<CoverType>, ICoverTypeRepository
-    {
-        public CoverTypeRepository(DbContext db) : base(db)
-        {
-        }
+namespace BulkyBook.DataAccess.Repository;
 
-        public void Update(CoverType coverType)
+public class CoverTypeRepository : Repository<CoverType>, ICoverTypeRepository
+{
+    public CoverTypeRepository(DbContext db) : base(db)
+    {
+    }
+
+    public void Update(CoverType coverType)
+    {
+        var coverTypeFromDb = dbSet.Find(coverType.Id);
+        if (coverTypeFromDb is not null)
         {
-            var coverTypeFromDb = dbSet.Find(coverType.Id);
-            if (coverTypeFromDb is not null)
-            {
-                coverTypeFromDb.Name = coverType.Name;
-            }
+            coverTypeFromDb.Name = coverType.Name;
         }
     }
 }

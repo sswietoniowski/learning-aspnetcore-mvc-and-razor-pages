@@ -2,17 +2,16 @@
 using BulkyBook.Models;
 using Microsoft.EntityFrameworkCore;
 
-namespace BulkyBook.DataAccess.Repository
-{
-    public class OrderHeaderRepository : Repository<OrderHeader>, IOrderHeaderRepository
-    {
-        public OrderHeaderRepository(DbContext db) : base(db)
-        {
-        }
+namespace BulkyBook.DataAccess.Repository;
 
-        public void Update(OrderHeader orderHeader)
-        {
-            db.Update(orderHeader);
-        }
+public class OrderHeaderRepository : Repository<OrderHeader>, IOrderHeaderRepository
+{
+    public OrderHeaderRepository(DbContext db) : base(db)
+    {
+    }
+
+    public void Update(OrderHeader orderHeader)
+    {
+        db.Update(orderHeader);
     }
 }

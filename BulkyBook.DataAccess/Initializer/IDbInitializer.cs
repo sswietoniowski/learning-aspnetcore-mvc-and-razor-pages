@@ -1,7 +1,6 @@
-﻿namespace BulkyBook.DataAccess.Initializer
+﻿namespace BulkyBook.DataAccess.Initializer;
+
+public interface IDbInitializer
 {
-    public interface IDbInitializer
-    {
-        void Initialize();
-    }
+    void Initialize();
 }

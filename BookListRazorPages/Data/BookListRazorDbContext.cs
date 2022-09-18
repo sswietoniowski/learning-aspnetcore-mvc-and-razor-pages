@@ -1,16 +1,15 @@
-﻿using BookListRazor.Models;
+﻿using BookListRazorPages.Models;
 using Microsoft.EntityFrameworkCore;
 
-namespace BookListRazor.Data
+namespace BookListRazorPages.Data;
+
+public class BookListRazorDbContext : DbContext
 {
-    public class BookListRazorDbContext : DbContext
+    public DbSet<Book> Books { get; set; }
+
+    public BookListRazorDbContext(DbContextOptions<BookListRazorDbContext> options) : base(options)
     {
-        public DbSet<Book> Books { get; set; }
-
-        public BookListRazorDbContext(DbContextOptions<BookListRazorDbContext> options) : base(options)
-        {
-        }
-
-
     }
+
+
 }

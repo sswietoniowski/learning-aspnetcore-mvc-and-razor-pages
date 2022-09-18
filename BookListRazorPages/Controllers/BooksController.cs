@@ -1,40 +1,39 @@
-﻿using BookListRazor.Data;
+﻿using BookListRazorPages.Data;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Threading.Tasks;
 
-namespace BookListRazor.Controllers
+namespace BookListRazorPages.Controllers;
+
+[Route("api/[controller]")]
+[ApiController]
+public class BooksController : Controller
 {
-    [Route("api/[controller]")]
-    [ApiController]
-    public class BooksController : Controller
+    private readonly BookListRazorDbContext _db;
+
+    public BooksController(BookListRazorDbContext db)
     {
-        private readonly BookListRazorDbContext _db;
+        _db = db;
+    }
 
-        public BooksController(BookListRazorDbContext db)
+    [HttpGet]
+    public async Task<IActionResult> GetAll()
+    {
+        return Json(new { data = await _db.Books.ToListAsync() });
+    }
+
+    [HttpDelete("{id:int}")]
+    public async Task<IActionResult> Delete(int id)
+    {
+        var book = await _db.Books.FindAsync(id);
+        if (book is null)
         {
-            _db = db;
+            return Json(new { success = false, message = "Error while deleting" });
         }
 
-        [HttpGet]
-        public async Task<IActionResult> GetAll()
-        {
-            return Json(new { data = await _db.Books.ToListAsync() });
-        }
+        _db.Books.Remove(book);
+        await _db.SaveChangesAsync();
 
-        [HttpDelete("{id:int}")]
-        public async Task<IActionResult> Delete(int id)
-        {
-            var book = await _db.Books.FindAsync(id);
-            if (book is null)
-            {
-                return Json(new { success = false, message = "Error while deleting" });
-            }
-
-            _db.Books.Remove(book);
-            await _db.SaveChangesAsync();
-
-            return Json(new { success = true, message = "Delete successful" });
-        }
+        return Json(new { success = true, message = "Delete successful" });
     }
 }

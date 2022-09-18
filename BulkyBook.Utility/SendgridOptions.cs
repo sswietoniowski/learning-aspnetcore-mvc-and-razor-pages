@@ -1,8 +1,7 @@
-﻿namespace BulkyBook.Utility
+﻿namespace BulkyBook.Utility;
+
+public class SendgridOptions
 {
-    public class SendgridOptions
-    {
-        public string ApiKey { get; set; }
-        public string User { get; set; }
-    }
+    public string ApiKey { get; set; }
+    public string User { get; set; }
 }

@@ -1,10 +1,9 @@
 ﻿using System.Collections.Generic;
 
-namespace BulkyBook.Models.ViewModels
+namespace BulkyBook.Models.ViewModels;
+
+public class ShoppingCartViewModel
 {
-    public class ShoppingCartViewModel
-    {
-        public IEnumerable<ShoppingCart> ListCart { get; set; }
-        public OrderHeader OrderHeader { get; set; }
-    }
+    public IEnumerable<ShoppingCart> ListCart { get; set; }
+    public OrderHeader OrderHeader { get; set; }
 }

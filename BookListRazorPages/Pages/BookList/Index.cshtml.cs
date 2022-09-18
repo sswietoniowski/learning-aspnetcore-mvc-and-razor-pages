@@ -1,42 +1,41 @@
-using BookListRazor.Data;
-using BookListRazor.Models;
+using BookListRazorPages.Data;
+using BookListRazorPages.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace BookListRazor.Pages.BookList
+namespace BookListRazorPages.Pages.BookList;
+
+public class IndexModel : PageModel
 {
-    public class IndexModel : PageModel
+    private readonly BookListRazorDbContext _db;
+
+    public IndexModel(BookListRazorDbContext db)
     {
-        private readonly BookListRazorDbContext _db;
+        _db = db;
+    }
 
-        public IndexModel(BookListRazorDbContext db)
+    public IEnumerable<Book> Books { get; set; }
+
+    public async Task OnGetAsync()
+    {
+        Books = await _db.Books.ToListAsync();
+    }
+
+    public async Task<IActionResult> OnPostDelete(int id)
+    {
+        var book = await _db.Books.FindAsync(id);
+
+        if (book is null)
         {
-            _db = db;
+            return NotFound();
         }
 
-        public IEnumerable<Book> Books { get; set; }
+        _db.Books.Remove(book);
+        await _db.SaveChangesAsync();
 
-        public async Task OnGetAsync()
-        {
-            Books = await _db.Books.ToListAsync();
-        }
-
-        public async Task<IActionResult> OnPostDelete(int id)
-        {
-            var book = await _db.Books.FindAsync(id);
-
-            if (book is null)
-            {
-                return NotFound();
-            }
-
-            _db.Books.Remove(book);
-            await _db.SaveChangesAsync();
-
-            return RedirectToAction("Index");
-        }
+        return RedirectToAction("Index");
     }
 }

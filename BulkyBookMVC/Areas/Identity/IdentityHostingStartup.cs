@@ -8,14 +8,13 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
 [assembly: HostingStartup(typeof(BulkyBook.MVC.Areas.Identity.IdentityHostingStartup))]
-namespace BulkyBook.MVC.Areas.Identity
+namespace BulkyBook.MVC.Areas.Identity;
+
+public class IdentityHostingStartup : IHostingStartup
 {
-    public class IdentityHostingStartup : IHostingStartup
+    public void Configure(IWebHostBuilder builder)
     {
-        public void Configure(IWebHostBuilder builder)
-        {
-            builder.ConfigureServices((context, services) => {
-            });
-        }
+        builder.ConfigureServices((context, services) => {
+        });
     }
 }

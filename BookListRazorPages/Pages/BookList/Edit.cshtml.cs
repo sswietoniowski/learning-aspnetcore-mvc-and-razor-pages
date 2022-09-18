@@ -1,46 +1,44 @@
-using BookListRazor.Data;
-using BookListRazor.Models;
+using BookListRazorPages.Data;
+using BookListRazorPages.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using System.Threading.Tasks;
 
-namespace BookListRazor.Pages.BookList
+namespace BookListRazorPages.Pages.BookList;
+
+public class EditModel : PageModel
 {
-    public class EditModel : PageModel
+    private readonly BookListRazorDbContext _db;
+
+    public EditModel(BookListRazorDbContext db)
     {
-        private readonly BookListRazorDbContext _db;
+        _db = db;
+    }
 
-        public EditModel(BookListRazorDbContext db)
+    [BindProperty]
+    public Book Book { get; set; }
+
+    public async Task OnGetAsync(int id)
+    {
+        Book = await _db.Books.FindAsync(id);
+    }
+
+    public async Task<IActionResult> OnPostAsync()
+    {
+        if (ModelState.IsValid)
         {
-            _db = db;
+            var book = await _db.Books.FindAsync(Book.Id);
+            book.Name = Book.Name;
+            book.Author = Book.Author;
+            book.ISBN = Book.ISBN;
+
+            await _db.SaveChangesAsync();
+
+            return RedirectToPage("Index");
         }
-
-        [BindProperty]
-        public Book Book { get; set; }
-
-        public async Task OnGetAsync(int id)
+        else
         {
-            Book = await _db.Books.FindAsync(id);
-        }
-
-        public async Task<IActionResult> OnPostAsync()
-        {
-            if (ModelState.IsValid)
-            {
-                var book = await _db.Books.FindAsync(Book.Id);
-                book.Name = Book.Name;
-                book.Author = Book.Author; 
-                book.ISBN = Book.ISBN;
-
-                await _db.SaveChangesAsync();
-
-                return RedirectToPage("Index");
-            }
-            else
-            {
-                return RedirectToPage();
-            }
+            return RedirectToPage();
         }
     }
 }
-

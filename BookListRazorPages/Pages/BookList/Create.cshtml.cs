@@ -1,40 +1,39 @@
-using BookListRazor.Data;
-using BookListRazor.Models;
+using BookListRazorPages.Data;
+using BookListRazorPages.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using System.Threading.Tasks;
 
-namespace BookListRazor.Pages.BookList
+namespace BookListRazorPages.Pages.BookList;
+
+public class CreateModel : PageModel
 {
-    public class CreateModel : PageModel
+    private readonly BookListRazorDbContext _db;
+
+    public CreateModel(BookListRazorDbContext db)
     {
-        private readonly BookListRazorDbContext _db;
+        _db = db;
+    }
 
-        public CreateModel(BookListRazorDbContext db)
+    [BindProperty]
+    public Book Book { get; set; }
+
+    public void OnGet()
+    {
+    }
+
+    public async Task<IActionResult> OnPost()
+    {
+        if (ModelState.IsValid)
         {
-            _db = db;
+            await _db.Books.AddAsync(Book);
+            await _db.SaveChangesAsync();
+
+            return RedirectToPage("Index");
         }
-
-        [BindProperty]
-        public Book Book { get; set; }
-
-        public void OnGet()
+        else
         {
-        }
-
-        public async Task<IActionResult> OnPost()
-        {
-            if (ModelState.IsValid)
-            {
-                await _db.Books.AddAsync(Book);
-                await _db.SaveChangesAsync();
-
-                return RedirectToPage("Index");
-            }
-            else
-            {
-                return Page();
-            }
+            return Page();
         }
     }
 }

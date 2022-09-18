@@ -1,10 +1,9 @@
 ﻿using Braintree;
 
-namespace BulkyBook.Utility
+namespace BulkyBook.Utility;
+
+public interface IBrainTreeGateway
 {
-    public interface IBrainTreeGateway
-    {
-        IBraintreeGateway CreateGateway();
-        IBraintreeGateway GetGateway();
-    }
+    IBraintreeGateway CreateGateway();
+    IBraintreeGateway GetGateway();
 }

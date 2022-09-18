@@ -1,65 +1,64 @@
-using BookListRazor.Data;
-using BookListRazor.Models;
+using BookListRazorPages.Data;
+using BookListRazorPages.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using System.Threading.Tasks;
 
-namespace BookListRazor.Pages.BookList
+namespace BookListRazorPages.Pages.BookList;
+
+public class UpsertModel : PageModel
 {
-    public class UpsertModel : PageModel
+    private readonly BookListRazorDbContext _db;
+
+    public UpsertModel(BookListRazorDbContext db)
     {
-        private readonly BookListRazorDbContext _db;
+        _db = db;
+    }
 
-        public UpsertModel(BookListRazorDbContext db)
+    [BindProperty]
+    public Book Book { get; set; }
+
+    public async Task<IActionResult> OnGetAsync(int? id)
+    {
+        Book = new Book();
+
+        if (id is null)
         {
-            _db = db;
-        }
-
-        [BindProperty]
-        public Book Book { get; set; }
-
-        public async Task<IActionResult> OnGetAsync(int? id)
-        {
-            Book = new Book();
-
-            if (id is null)
-            {
-                // insert
-                return Page();
-            }
-
-            Book = await _db.Books.FindAsync(id);
-
-            if (Book is null)
-            {
-                return NotFound();
-            }
-
-            // update
+            // insert
             return Page();
         }
 
-        public async Task<IActionResult> OnPostAsync()
+        Book = await _db.Books.FindAsync(id);
+
+        if (Book is null)
         {
-            if (ModelState.IsValid)
-            {
-                if (Book.Id == 0) // new record (insert)
-                {
-                    await _db.Books.AddAsync(Book);
-                }
-                else // existing record (update)
-                {
-                    _db.Books.Update(Book);
-                }
+            return NotFound();
+        }
 
-                await _db.SaveChangesAsync();
+        // update
+        return Page();
+    }
 
-                return RedirectToPage("Index");
-            }
-            else
+    public async Task<IActionResult> OnPostAsync()
+    {
+        if (ModelState.IsValid)
+        {
+            if (Book.Id == 0) // new record (insert)
             {
-                return RedirectToPage();
+                await _db.Books.AddAsync(Book);
             }
+            else // existing record (update)
+            {
+                _db.Books.Update(Book);
+            }
+
+            await _db.SaveChangesAsync();
+
+            return RedirectToPage("Index");
+        }
+        else
+        {
+            return RedirectToPage();
         }
     }
 }
