@@ -6,3 +6,8 @@ Based on these courses (originaly created for .NET 5 and later upgraded to .NET 
 - [The Complete Guide to ASP.NET Core MVC (.NET 6)](https://learning.oreilly.com/videos/the-complete-guide/9781801074247/).
 
 Original course materials can be found [here (.NET 5)](https://github.com/PacktPublishing/Complete-Guide-to-ASP.NET-Core-MVC-dotNET-5) and [here (.NET 6)](https://github.com/PacktPublishing/The-Complete-Guide-to-ASP.NET-Core-MVC-.NET-6-).
+
+Other helpful materials:
+
+- [Introduction to ASP.NET MVC in C#: Basics, Advanced Topics, Tips, Tricks, Best Practices, and More](https://youtu.be/phyV-OQNeRM),
+- [Intro to Bootstrap in ASP.NET MVC](https://youtu.be/vRqz_zUiJTw).
