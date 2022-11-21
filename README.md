@@ -1,6 +1,8 @@
 # Learning ASP.NET Core - MVC & Razor Pages
 
-Based on these courses (originaly created for .NET 5 and later upgraded to .NET 6/7):
+This code was originaly created for .NET 6 and later upgraded to .NET 7.
+
+Based on these courses:
 
 - [The Complete Guide to ASP.NET Core MVC (.NET 5)](https://learning.oreilly.com/videos/the-complete-guide/9781801074247/),
 - [The Complete Guide to ASP.NET Core MVC (.NET 6)](https://learning.oreilly.com/videos/the-complete-guide/9781801074247/).
