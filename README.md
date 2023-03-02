@@ -14,4 +14,5 @@ Other helpful materials (free):
 - [Learn ASP.NET Core MVC (.NET 6) - Full Course](https://youtu.be/hZ1DASYd9rk),
 - [Introduction to ASP.NET MVC in C#: Basics, Advanced Topics, Tips, Tricks, Best Practices, and More](https://youtu.be/phyV-OQNeRM),
 - [Intro to Bootstrap in ASP.NET MVC](https://youtu.be/vRqz_zUiJTw),
-- [ASP.NET Core Developer Roadmap](https://github.com/MoienTajik/AspNetCore-Developer-Roadmap).
+- [ASP.NET Core Developer Roadmap](https://github.com/MoienTajik/AspNetCore-Developer-Roadmap),
+- [Coding Shorts: Can You Use VSCode for Full-Time ASP.NET Core Dev?](https://youtu.be/71Hx2pfgym8).
